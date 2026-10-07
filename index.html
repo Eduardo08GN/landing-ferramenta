@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vá dormir. Acorde com os vídeos prontos.</title>
+<meta name="description" content="A ferramenta que recria seus vídeos que já vendem com o Veo 3, coloca narração, legenda e CTA e entrega pronto. 100% automática. Grupo fechado de 10 pessoas.">
+<meta property="og:title" content="Vá dormir. Acorde com os vídeos prontos para postar.">
+<meta property="og:description" content="No TikTok Shop, no Instagram e no Facebook, quem posta mais vende mais. Grupo fechado: 10 vagas.">
+<meta property="og:image" content="https://midia.automaweb.pro/landing-ferramenta/vsl-ferramenta-capa.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#060E0D">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fontes/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://midia.automaweb.pro">
+<style>
+@font-face { font-family: "Bricolage"; src: url(assets/fontes/bricolage.woff2) format("woff2"); font-weight: 200 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bricolage"; src: url(assets/fontes/bricolage-ext.woff2) format("woff2"); font-weight: 200 800; font-display: swap; unicode-range: U+0100-024F, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Public Sans"; src: url(assets/fontes/publicsans-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Public Sans"; src: url(assets/fontes/publicsans-600.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url(assets/fontes/jbmono.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+
+/* Design system da ferramenta (o mesmo do painel): fundo teal profundo, acao em "por do sol", pronto em oliva */
+:root {
+  --bg-deep: #030807; --bg: #060E0D; --surface: #0E1B1A; --surface-2: #132524; --line: #1C2E2C; --line-strong: #2C4643;
+  --text: #F0EDE2; --text-2: #A9BDBA; --text-3: #7E9B98;
+  --accent: #5FD6CE; --accent-soft: rgba(95, 214, 206, .12);
+  --sun: #F4B942; --sun-deep: #E8833A; --sun-ink: #2A1503; --sun-soft: rgba(244, 185, 66, .12);
+  --sunset: linear-gradient(135deg, #F6C453 0%, #F0A23B 55%, #E8833A 100%);
+  --green: #A9C46A; --red: #EE7A66;
+  --display: "Bricolage", ui-sans-serif, system-ui, sans-serif;
+  --body: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --r: 18px; --r-sm: 10px; --pill: 999px;
+  --glow-sun: 0 14px 40px -12px rgba(240, 162, 59, .6);
+  --largura: 1180px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 17px/1.65 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  background: radial-gradient(1100px 560px at 80% -10%, rgba(240, 162, 59, .10), transparent 60%), radial-gradient(900px 500px at 5% 0%, rgba(95, 214, 206, .07), transparent 60%), var(--bg); }
+img, video { display: block; max-width: 100%; }
+a { color: inherit; }
+::selection { background: rgba(95, 214, 206, .3); }
+:focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; border-radius: 6px; }
+.envolve { width: min(var(--largura), 100% - 40px); margin: 0 auto; }
+.mono { font-family: var(--mono); letter-spacing: .18em; text-transform: uppercase; font-size: 12px; }
+.olho { font-family: var(--mono); letter-spacing: .22em; text-transform: uppercase; font-size: 12.5px; color: var(--accent); margin: 0 0 14px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -.035em; line-height: 1.02; font-weight: 800; }
+h2 { font-size: clamp(34px, 5vw, 60px); }
+h2 em, h1 em { font-style: normal; background: var(--sunset); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { color: var(--text-2); font-size: clamp(17px, 1.6vw, 20px); max-width: 64ch; }
+section { padding: clamp(72px, 10vw, 128px) 0; position: relative; }
+.pontos::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(240, 237, 226, .07) 1.4px, transparent 1.5px); background-size: 34px 34px; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+
+/* botao */
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 62px; padding: 0 34px; border-radius: var(--pill); border: 0; cursor: pointer;
+  background: var(--sunset); color: var(--sun-ink); font: 700 18px/1 var(--display); letter-spacing: -.01em; text-decoration: none; box-shadow: var(--glow-sun);
+  transition: transform .2s cubic-bezier(.22,1,.36,1), filter .2s; position: relative; }
+.cta:hover { transform: translateY(-2px); filter: brightness(1.06) saturate(1.05); }
+.cta svg { flex: none; }
+.cta-nota { margin: 14px 0 0; font: 400 13px/1.5 var(--mono); color: var(--text-3); letter-spacing: .02em; }
+.cta-nota b { color: var(--sun); font-weight: 400; }
+
+/* faixa de escassez */
+.faixa { position: sticky; top: 0; z-index: 30; background: rgba(3, 8, 7, .88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.faixa .envolve { display: flex; align-items: center; justify-content: center; gap: 14px; min-height: 44px; font: 400 12.5px/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--text-2); text-align: center; padding: 8px 0; }
+.faixa .ao-vivo { width: 8px; height: 8px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 0 0 rgba(244,185,66,.6); animation: pulso 1.8s infinite; flex: none; }
+.faixa b { color: var(--sun); font-weight: 400; }
+@keyframes pulso { 0% { box-shadow: 0 0 0 0 rgba(244,185,66,.55); } 70% { box-shadow: 0 0 0 10px rgba(244,185,66,0); } 100% { box-shadow: 0 0 0 0 rgba(244,185,66,0); } }
+
+/* hero */
+.hero { padding-top: clamp(48px, 7vw, 84px); padding-bottom: clamp(56px, 8vw, 96px); text-align: center; }
+.hero h1 { font-size: clamp(42px, 7.2vw, 92px); max-width: 15ch; margin: 0 auto; }
+.hero .lead { margin: 22px auto 0; text-align: center; }
+.assista { margin: 36px 0 14px; display: inline-flex; align-items: center; gap: 10px; color: var(--sun); }
+.assista::before, .assista::after { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .6; }
+.vsl { position: relative; max-width: 980px; margin: 0 auto; border-radius: 22px; overflow: hidden; background: #000; aspect-ratio: 16 / 9;
+  border: 1px solid var(--line-strong); box-shadow: 0 60px 140px -40px rgba(0,0,0,.9), 0 0 0 8px rgba(95,214,206,.04); }
+.vsl video, .vsl img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.vsl .capa { cursor: pointer; border: 0; padding: 0; background: none; position: absolute; inset: 0; }
+.vsl .capa::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(3,8,7,.15), rgba(3,8,7,.65)); }
+.vsl .play { position: absolute; z-index: 2; left: 50%; top: 50%; width: 104px; height: 104px; margin: -52px; border-radius: 50%; background: var(--sunset); display: grid; place-items: center;
+  box-shadow: var(--glow-sun), 0 0 0 14px rgba(244,185,66,.14); animation: respira 2.4s ease-in-out infinite; }
+.vsl .play svg { margin-left: 6px; }
+.vsl .som { position: absolute; z-index: 2; left: 50%; bottom: 26px; transform: translateX(-50%); font: 400 13px var(--mono); letter-spacing: .16em; text-transform: uppercase;
+  background: rgba(3,8,7,.75); padding: 9px 16px; border-radius: var(--pill); color: var(--text); white-space: nowrap; }
+@keyframes respira { 50% { transform: scale(1.06); } }
+.hero .cta { margin-top: 36px; }
+.hud { position: absolute; inset: 14px; pointer-events: none; z-index: 3; }
+.hud i { position: absolute; width: 18px; height: 18px; border: 0 solid rgba(240,237,226,.55); }
+.hud i:nth-child(1) { left: 0; top: 0; border-left-width: 2px; border-top-width: 2px; } .hud i:nth-child(2) { right: 0; top: 0; border-right-width: 2px; border-top-width: 2px; }
+.hud i:nth-child(3) { left: 0; bottom: 0; border-left-width: 2px; border-bottom-width: 2px; } .hud i:nth-child(4) { right: 0; bottom: 0; border-right-width: 2px; border-bottom-width: 2px; }
+
+/* numeros */
+.numeros { padding: 0 0 clamp(64px, 9vw, 110px); }
+.numeros .grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.numeros .grade > div { background: var(--surface); padding: 26px 24px; }
+.numeros b { display: block; font: 800 clamp(34px, 4vw, 50px)/1 var(--display); letter-spacing: -.04em; }
+.numeros b.sol { background: var(--sunset); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.numeros span { display: block; margin-top: 10px; font-size: 14.5px; color: var(--text-2); line-height: 1.45; }
+.rodape-nota { font: 400 12px/1.5 var(--mono); color: var(--text-3); margin: 14px 0 0; }
+
+/* problema */
+.problema { text-align: left; }
+.problema .duas { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+.bilhetes { display: grid; grid-template-columns: repeat(20, 1fr); gap: 5px; }
+.bilhetes span { aspect-ratio: 9 / 16; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); }
+.bilhetes span.on { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 18px rgba(95,214,206,.5); }
+.bilhetes span.vc { background: var(--sun); border-color: var(--sun); }
+.legenda-bilhetes { display: flex; gap: 20px; margin-top: 16px; font: 400 12px var(--mono); color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; flex-wrap: wrap; }
+.legenda-bilhetes i { display: inline-block; width: 10px; height: 16px; border-radius: 3px; vertical-align: -3px; margin-right: 8px; }
+.grande-frase { font: 800 clamp(30px, 4.2vw, 52px)/1.04 var(--display); letter-spacing: -.035em; margin: 18px 0 0; }
+
+/* dor */
+.dor { background: linear-gradient(180deg, transparent, rgba(3,8,7,.6) 30%, rgba(3,8,7,.6) 70%, transparent); }
+.lista-dor { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.lista-dor li { display: flex; gap: 16px; padding: 20px 22px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); color: var(--text-2); }
+.lista-dor li b { color: var(--text); font-weight: 600; }
+.lista-dor .x { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: rgba(238,122,102,.12); color: var(--red); font: 700 15px var(--display); }
+.virada { margin: 44px 0 0; padding: 30px 32px; border-radius: var(--r); border: 1px solid rgba(244,185,66,.35); background: linear-gradient(135deg, rgba(244,185,66,.10), rgba(232,131,58,.04)); }
+.virada p { margin: 0; font: 700 clamp(22px, 2.6vw, 30px)/1.25 var(--display); letter-spacing: -.02em; }
+
+/* mecanismo */
+.passos { list-style: none; padding: 0; margin: 48px 0 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; counter-reset: p; }
+.passos li { position: relative; padding: 24px 20px 22px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); counter-increment: p; }
+.passos li::before { content: "0" counter(p); display: block; font: 400 12px var(--mono); letter-spacing: .2em; color: var(--accent); margin-bottom: 14px; }
+.passos li b { display: block; font: 700 19px/1.2 var(--display); letter-spacing: -.015em; margin-bottom: 8px; }
+.passos li span { font-size: 14.5px; color: var(--text-2); line-height: 1.5; display: block; }
+.passos li.destaque { border-color: rgba(95,214,206,.45); background: linear-gradient(180deg, rgba(95,214,206,.08), transparent 60%), var(--surface); }
+.selo-mec { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 8px 16px; border-radius: var(--pill); border: 1px solid rgba(95,214,206,.35); color: var(--accent); font: 400 12.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+
+/* noite */
+.noite { overflow: hidden; }
+.relogio { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 50px; border-top: 1px solid var(--line); }
+.relogio div { padding: 22px 18px 0 0; border-right: 1px solid var(--line); }
+.relogio div:last-child { border-right: 0; }
+.relogio time { display: block; font: 400 clamp(30px, 3.6vw, 46px)/1 var(--mono); letter-spacing: -.04em; color: var(--text); }
+.relogio p { margin: 12px 0 0; font-size: 14.5px; color: var(--text-2); line-height: 1.5; padding-right: 10px; }
+.relogio div:last-child time { color: var(--sun); }
+.barra-noite { height: 4px; border-radius: 2px; margin-top: 30px; background: linear-gradient(90deg, #1b2a6b, #3a3f8f 40%, #c9774a 80%, var(--sun)); }
+
+/* prova */
+.prova .topo { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.grade-videos { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 40px; }
+.vid { position: relative; aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); cursor: pointer; padding: 0; color: var(--text); font: inherit; }
+.vid img, .vid video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.vid .mini-play { position: absolute; z-index: 2; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px; border-radius: 50%; background: rgba(3,8,7,.6); border: 1px solid rgba(240,237,226,.4); display: grid; place-items: center; transition: transform .2s; }
+.vid:hover .mini-play { transform: scale(1.1); }
+.vid.tocando .mini-play { opacity: 0; }
+.vid .rot { position: absolute; z-index: 2; left: 8px; bottom: 8px; font: 400 10.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; background: rgba(3,8,7,.7); padding: 4px 8px; border-radius: 6px; }
+
+/* recursos */
+.recursos .grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
+.rec { padding: 26px 24px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); }
+.rec .ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); margin-bottom: 18px; }
+.rec.sol .ico { background: var(--sun-soft); color: var(--sun); }
+.rec b { display: block; font: 700 20px/1.2 var(--display); letter-spacing: -.015em; }
+.rec p { margin: 8px 0 0; font-size: 15px; color: var(--text-2); line-height: 1.55; }
+
+/* requisitos */
+.requisitos .caixa { border-radius: 26px; border: 1px solid var(--line-strong); background: linear-gradient(180deg, rgba(95,214,206,.05), transparent 40%), var(--surface); padding: clamp(28px, 4vw, 52px); }
+.reqs { list-style: none; padding: 0; margin: 34px 0 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.reqs li { display: flex; gap: 18px; padding: 22px; border-radius: var(--r); background: var(--bg); border: 1px solid var(--line); }
+.reqs .n { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--sunset); color: var(--sun-ink); font: 800 16px var(--display); }
+.reqs b { display: block; font: 700 19px/1.25 var(--display); letter-spacing: -.01em; }
+.reqs p { margin: 6px 0 0; font-size: 15px; color: var(--text-2); line-height: 1.55; }
+.filtro { margin: 26px 0 0; padding: 18px 22px; border-radius: var(--r); border-left: 3px solid var(--sun); background: var(--sun-soft); color: var(--text); font-size: 16px; }
+
+/* para quem */
+.paraquem .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+.coluna { padding: 30px; border-radius: var(--r); border: 1px solid var(--line); background: var(--surface); }
+.coluna h3 { font-size: 24px; display: flex; align-items: center; gap: 12px; }
+.coluna ul { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 12px; }
+.coluna li { display: flex; gap: 12px; color: var(--text-2); font-size: 16px; }
+.coluna li::before { content: "✓"; color: var(--green); font-weight: 700; flex: none; }
+.coluna.nao li::before { content: "✕"; color: var(--red); }
+.coluna.sim { border-color: rgba(169,196,106,.35); }
+
+/* vagas */
+.vagas { text-align: center; }
+.assentos { display: flex; justify-content: center; gap: 12px; margin: 40px 0 0; flex-wrap: wrap; }
+.assentos span { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; border: 1px solid var(--line-strong); background: var(--surface); font: 400 15px var(--mono); color: var(--text-2); }
+.assentos span:nth-child(odd) { transform: translateY(6px); }
+.vagas .lead { margin: 26px auto 0; }
+.vagas .cta { margin-top: 38px; }
+
+/* faq */
+.faq .lista { margin-top: 40px; display: grid; gap: 10px; }
+details { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); padding: 0 24px; }
+details[open] { border-color: var(--line-strong); }
+summary { cursor: pointer; list-style: none; padding: 22px 0; font: 700 19px/1.3 var(--display); letter-spacing: -.01em; display: flex; justify-content: space-between; gap: 18px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--sun); font: 400 26px/1 var(--mono); flex: none; transition: transform .2s; }
+details[open] summary::after { transform: rotate(45deg); }
+details p { margin: 0 0 22px; color: var(--text-2); font-size: 16px; }
+
+/* fecho */
+.fecho { text-align: center; }
+.fecho h2 { max-width: 18ch; margin: 0 auto; }
+.escolhas { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 44px auto 0; max-width: 900px; text-align: left; }
+.escolha { padding: 26px; border-radius: var(--r); border: 1px solid var(--line); background: var(--surface); }
+.escolha .mono { color: var(--text-3); }
+.escolha p { margin: 10px 0 0; color: var(--text-2); }
+.escolha.boa { border-color: rgba(244,185,66,.45); background: linear-gradient(135deg, rgba(244,185,66,.08), transparent 60%), var(--surface); }
+.escolha.boa .mono { color: var(--sun); }
+.fecho .cta { margin-top: 40px; }
+
+footer { border-top: 1px solid var(--line); padding: 38px 0 120px; color: var(--text-3); font-size: 13px; line-height: 1.6; }
+footer p { margin: 0 0 10px; max-width: 90ch; }
+
+/* barra fixa no celular */
+.barra-cta { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); background: rgba(3,8,7,.92); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); display: none; transform: translateY(110%); transition: transform .35s cubic-bezier(.22,1,.36,1); }
+.barra-cta.ver { transform: none; }
+.barra-cta .cta { width: 100%; min-height: 54px; font-size: 16.5px; }
+
+/* revelar ao rolar */
+.revela { opacity: 0; transform: translateY(26px); transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+.revela.visivel { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .revela { opacity: 1; transform: none; transition: none; } .vsl .play, .faixa .ao-vivo { animation: none; } html { scroll-behavior: auto; } }
+
+@media (max-width: 1000px) {
+  .passos { grid-template-columns: repeat(2, 1fr); }
+  .grade-videos { grid-template-columns: repeat(4, 1fr); }
+  .recursos .grade { grid-template-columns: repeat(2, 1fr); }
+  .numeros .grade { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  .problema .duas, .lista-dor, .reqs, .paraquem .duas, .escolhas { grid-template-columns: 1fr; }
+  .passos, .recursos .grade { grid-template-columns: 1fr; }
+  .grade-videos { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .relogio { grid-template-columns: 1fr; border-top: 0; }
+  .relogio div { border-right: 0; border-top: 1px solid var(--line); padding: 18px 0; }
+  .vsl { border-radius: 14px; }
+  .vsl .play { width: 78px; height: 78px; margin: -39px; }
+  .faixa .envolve { font-size: 10.5px; letter-spacing: .08em; }
+  .barra-cta { display: block; }
+  .assentos span { width: 42px; height: 42px; }
+  .cta { min-height: 58px; padding: 0 24px; font-size: 16.5px; }
+}
+</style>
+</head>
+<body>
+
+<div class="faixa" role="note">
+  <div class="envolve"><span class="ao-vivo" aria-hidden="true"></span><span>Grupo fechado · <b>apenas 10 vagas</b> · entrada por conversa, sem preço na página</span></div>
+</div>
+
+<!-- ═══ HERO + VSL (Benson: promessa grande, curiosidade, video acima da dobra, CTA logo abaixo) ═══ -->
+<header class="hero">
+  <div class="envolve">
+    <p class="olho">Para quem vende no TikTok Shop, Instagram e Facebook</p>
+    <h1>Vá dormir. Acorde com <em>os vídeos prontos</em> para postar.</h1>
+    <p class="lead">A ferramenta pega os vídeos que já vendem, recria cada cena com o <strong>Veo 3, do Google</strong>, coloca narração, legenda e a palavra do CTA em destaque, e entrega tudo pronto na pasta. <strong>100% automática</strong>: ela trabalha a noite inteira no seu computador, sem você encostar no mouse.</p>
+    <p class="mono assista">Assista: 40 segundos, com som</p>
+    <div class="vsl" id="vsl">
+      <button class="capa" type="button" aria-label="Assistir o vídeo de 40 segundos com som">
+        <img src="https://midia.automaweb.pro/landing-ferramenta/vsl-ferramenta-capa.jpg" alt="" width="1920" height="1080" fetchpriority="high">
+        <span class="play" aria-hidden="true"><svg width="34" height="38" viewBox="0 0 34 38"><path d="M2 2v34l30-17z" fill="#2A1503"/></svg></span>
+        <span class="som">▶ Toque para ver com som</span>
+      </button>
+      <div class="hud" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </div>
+    <a class="cta" href="#" data-wa>
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1a17 17 0 0 1-1.7-.6c-3-1.3-5-4.3-5.1-4.5-.2-.2-1.2-1.6-1.2-3.1s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.3.5-.5.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 .9c.3.2.5.2.6.4.1.1.1.7-.1 1.4Z"/></svg>
+      Quero uma das 10 vagas
+    </a>
+    <p class="cta-nota">Abre uma conversa no WhatsApp · <b>o valor é passado só para quem tem perfil</b></p>
+  </div>
+</header>
+
+<!-- ═══ NUMEROS (medidos, com a fonte da medicao) ═══ -->
+<div class="numeros">
+  <div class="envolve revela">
+    <div class="grade">
+      <div><b class="sol" data-conta="95">~95</b><span>cenas geradas por hora no modo automático*</span></div>
+      <div><b>23–30</b><span>vídeos curtos prontos por hora, numa única conta*</span></div>
+      <div><b>0</b><span>cliques seus enquanto ela trabalha: ela não usa o seu mouse</span></div>
+      <div><b>1 → 20</b><span>versões de um mesmo anúncio no modo Turbo, cada uma com outra pessoa e outro cenário</span></div>
+    </div>
+    <p class="rodape-nota">* Medido numa conta no modo automático. O ritmo depende do Google, que às vezes pede uma pausa; quando isso acontece, ela espera e continua sozinha. Uma noite de 8 horas nesse ritmo passa de 100 vídeos.</p>
+  </div>
+</div>
+
+<!-- ═══ O PROBLEMA E O SEU MECANISMO (Georgi: por que o problema existe) ═══ -->
+<section class="problema pontos" id="volume">
+  <div class="envolve duas">
+    <div class="revela">
+      <p class="olho">A regra que ninguém te contou</p>
+      <h2>No orgânico, quem posta mais <em>vende mais.</em></h2>
+      <p class="lead" style="margin-top:22px">O algoritmo do TikTok Shop, do Instagram e do Facebook não sabe quem você é. Ele testa. Cada vídeo que você posta é um <strong>bilhete</strong>: vai para um punhado de pessoas e, se segurar a atenção, ganha mais distribuição. Quem posta 3 vídeos por dia tem 3 bilhetes. Quem posta 100 tem 100.</p>
+      <p class="grande-frase">Não é o vídeo perfeito que vende. <em>É o volume de tentativas.</em></p>
+    </div>
+    <div class="revela" aria-hidden="true">
+      <div class="bilhetes" id="bilhetes"></div>
+      <div class="legenda-bilhetes"><span><i style="background:var(--sun)"></i>Você hoje: 3 por dia</span><span><i style="background:var(--accent)"></i>Com a ferramenta: uma noite de trabalho</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ A DOR (Benson: agitar antes de oferecer) ═══ -->
+<section class="dor" id="dor">
+  <div class="envolve">
+    <div class="revela">
+      <p class="olho">Por que você ainda não tem esse volume</p>
+      <h2>Volume, até hoje, custava <em>o seu dia inteiro.</em></h2>
+    </div>
+    <ul class="lista-dor revela">
+      <li><span class="x">✕</span><span><b>Gravar, regravar, editar, legendar, exportar.</b> Um vídeo por hora, se tudo der certo, e o dia acaba.</span></li>
+      <li><span class="x">✕</span><span><b>Pagar criador de conteúdo e editor.</b> Cada vídeo novo custa caro, demora dias e chega com o gancho errado.</span></li>
+      <li><span class="x">✕</span><span><b>O criativo cansa.</b> O mesmo rosto, o mesmo cenário, e o público para de ver. Você precisa de variação, não de mais um vídeo igual.</span></li>
+      <li><span class="x">✕</span><span><b>Aparecer todo dia.</b> Câmera, luz, cenário, energia. Não escala, e você vira refém da própria agenda.</span></li>
+    </ul>
+    <div class="virada revela"><p>E se o seu vídeo que já vende virasse dezenas de vídeos novos, prontos, enquanto você dorme, sem gravar nada?</p></div>
+  </div>
+</section>
+
+<!-- ═══ O MECANISMO UNICO (Georgi: nome + como funciona) ═══ -->
+<section class="mecanismo pontos" id="como-funciona">
+  <div class="envolve">
+    <div class="revela">
+      <p class="olho">Como funciona</p>
+      <h2>Clonagem por Cena: <em>o seu vencedor, multiplicado.</em></h2>
+      <p class="lead" style="margin-top:22px">Em vez de inventar vídeo do zero, a ferramenta parte do que <strong>já provou que vende</strong>. Ela desmonta o vídeo em cenas, recria cada uma no Veo 3 e monta de volta: mesma fala, mesmo gancho, mesma estrutura que já funcionou. Só que novo.</p>
+      <span class="selo-mec">● O Piloto opera o Google Flow por você</span>
+    </div>
+    <ol class="passos revela">
+      <li><b>Você escolhe os vídeos</b><span>Direto do HD do seu computador: os reels que já vendem. É a única coisa que você faz.</span></li>
+      <li><b>Ela desmonta cada vídeo</b><span>Acha os cortes, divide em cenas de até 8 segundos e transcreve a fala palavra por palavra.</span></li>
+      <li class="destaque"><b>O Piloto gera no Veo 3</b><span>Sozinho, na sua conta do Google, cena por cena. Sem usar o seu mouse: você pode usar o computador normalmente.</span></li>
+      <li><b>Ela confere cada cena</b><span>Ouve se a fala bateu. Se não bateu, gera de novo. O que der problema fica separado, e o resto segue.</span></li>
+      <li><b>Monta e entrega</b><span>Corta no tempo da fala, coloca a legenda (10 estilos), destaca a palavra do CTA e entrega o vídeo pronto na pasta.</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ A NOITE (future pacing) ═══ -->
+<section class="noite" id="a-noite">
+  <div class="envolve">
+    <div class="revela">
+      <p class="olho">Uma noite com a ferramenta</p>
+      <h2>Você aperta um botão às 23h. <em>Ela não para até você acordar.</em></h2>
+    </div>
+    <div class="relogio revela">
+      <div><time>23:00</time><p>Você escolhe os vídeos, a palavra do CTA e a legenda. Aperta <strong>Automático</strong>. Vai dormir.</p></div>
+      <div><time>00:30</time><p>As primeiras cenas já voltaram do Veo, conferidas. O primeiro vídeo está montado.</p></div>
+      <div><time>02:00</time><p>A fila anda sozinha: cena pronta, próxima cena. Se o Google pede calma, ela espera e segue.</p></div>
+      <div><time>04:30</time><p>Dezenas de vídeos na pasta, cada um com legenda e CTA. Você continua dormindo.</p></div>
+      <div><time>07:00</time><p>Você abre o computador. A pasta de entregues está cheia. É só escolher e postar.</p></div>
+    </div>
+    <div class="barra-noite revela" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ═══ PROVA ═══ -->
+<section class="prova" id="prova">
+  <div class="envolve">
+    <div class="topo revela">
+      <div>
+        <p class="olho">Prova</p>
+        <h2>Nenhum destes vídeos <em>foi filmado.</em></h2>
+      </div>
+      <p class="lead" style="max-width:42ch;margin:0">Nada de câmera, ator ou cenário. Vídeos gerados com IA, verticais, prontos para o short-form. Toque em qualquer um para ver com som.</p>
+    </div>
+    <div class="grade-videos revela" id="videos"></div>
+  </div>
+</section>
+
+<!-- ═══ O QUE ELA FAZ ═══ -->
+<section class="recursos pontos" id="recursos">
+  <div class="envolve">
+    <div class="revela">
+      <p class="olho">Tudo o que vem na ferramenta</p>
+      <h2>Produção de agência, <em>sem a agência.</em></h2>
+    </div>
+    <div class="grade revela">
+      <div class="rec sol"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><b>Modo Automático</b><p>O Piloto faz tudo no Google Flow: sobe as imagens, tira a legenda velha, gera, baixa e monta. Você só acompanha, se quiser.</p></div>
+      <div class="rec sol"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><b>Modo Turbo</b><p>Um anúncio vira de 1 a 20 vídeos, cada um com outra pessoa e outro cenário, com a mesma fala que já vende. Criativo que não cansa.</p></div>
+      <div class="rec"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h4M13 15h4M7 11h10"/></svg></div><b>Legenda e CTA prontos</b><p>Legenda palavra por palavra em 10 estilos, com a palavra que as pessoas devem comentar em destaque.</p></div>
+      <div class="rec"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><b>Confere antes de entregar</b><p>Cada cena tem a fala conferida. Vídeo com problema na origem é barrado antes de gastar crédito.</p></div>
+      <div class="rec"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div><b>Não trava, não perde</b><p>Uma cena recusada não para a fila. Fechou a janela? Quando abrir de novo, ela continua de onde parou.</p></div>
+      <div class="rec"><div class="ico"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><b>Sua conta, sua senha</b><p>Ela trabalha no Flow da sua conta Google, onde você mesmo entrou. A ferramenta nunca vê nem digita a sua senha.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRE-REQUISITOS (filtro: Benson/Georgi qualificam o comprador) ═══ -->
+<section class="requisitos" id="requisitos">
+  <div class="envolve">
+    <div class="caixa revela">
+      <p class="olho">Leia antes de pedir a sua vaga</p>
+      <h2>Os pré-requisitos <em>não são opcionais.</em></h2>
+      <p class="lead" style="margin-top:18px">A ferramenta usa o que existe de mais forte em vídeo e em IA hoje. Para rodar no ritmo desta página, você precisa ter:</p>
+      <ul class="reqs">
+        <li><span class="n">1</span><div><b>Conta Google AI Ultra, com acesso ao Veo 3</b><p>É ela que libera a geração no Google Flow. No plano Ultra, cada cena gerada custa 5 créditos: um vídeo de 4 cenas sai por cerca de 20 créditos. Os créditos são da sua conta.</p></div></li>
+        <li><span class="n">2</span><div><b>Claude Code no plano Max 5x</b><p>É o cérebro da operação: lê cada vídeo, descreve as cenas para o Veo e opera a ferramenta junto com você, em português simples. Você não precisa saber programar.</p></div></li>
+        <li><span class="n">3</span><div><b>Um computador com Windows e internet</b><p>A ferramenta roda na sua máquina e entrega os vídeos numa pasta sua. Enquanto ela trabalha, o computador fica ligado.</p></div></li>
+        <li><span class="n">4</span><div><b>Os seus vídeos que já vendem</b><p>Reels falados, de preferência verticais e com cortes claros entre as cenas. É deles que nascem as dezenas de versões novas.</p></div></li>
+      </ul>
+      <p class="filtro"><strong>Se você não tem e não pretende ter a conta Ultra e o Claude Code Max 5x, esta turma não é para você.</strong> Melhor saber agora do que depois.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PARA QUEM E PARA QUEM NAO ═══ -->
+<section class="paraquem" id="para-quem">
+  <div class="envolve">
+    <div class="revela"><p class="olho">Seja honesto com você</p><h2>Para quem é. <em>E para quem não é.</em></h2></div>
+    <div class="duas revela">
+      <div class="coluna sim"><h3>É para você se</h3><ul>
+        <li>Vende no TikTok Shop, no Instagram ou no Facebook e sabe que o orgânico é jogo de volume.</li>
+        <li>Já tem vídeos que vendem e quer multiplicá-los sem gravar de novo.</li>
+        <li>Quer testar dezenas de variações por dia, não 3.</li>
+        <li>Prefere investir em ferramenta e créditos a pagar equipe por vídeo.</li>
+      </ul></div>
+      <div class="coluna nao"><h3>Não é para você se</h3><ul>
+        <li>Procura um botão mágico que vende sozinho, sem você escolher bons vídeos.</li>
+        <li>Não quer ter a conta Google AI Ultra nem o Claude Code Max 5x.</li>
+        <li>Posta um vídeo por semana e está satisfeito com isso.</li>
+        <li>Quer resultado garantido: ninguém controla o algoritmo, nem o ritmo do Google.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ESCASSEZ ═══ -->
+<section class="vagas pontos" id="vagas">
+  <div class="envolve revela">
+    <p class="olho">Turma fechada</p>
+    <h2>Apenas <em>10 vagas.</em> Grupo fechado.</h2>
+    <div class="assentos" aria-label="10 vagas">
+      <span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span>
+    </div>
+    <p class="lead">Esta não é uma ferramenta aberta para qualquer um comprar. É um grupo fechado de 10 pessoas. A entrada é por conversa: você conta o que vende e onde, e o valor é passado só para quem tem perfil. Quando as 10 vagas fecharem, a ferramenta fecha junto.</p>
+    <a class="cta" href="#" data-wa>Quero uma das 10 vagas</a>
+    <p class="cta-nota">Conversa direta no WhatsApp · <b>sem compromisso</b></p>
+  </div>
+</section>
+
+<!-- ═══ FAQ (respostas honestas, do manual da ferramenta) ═══ -->
+<section class="faq" id="perguntas">
+  <div class="envolve">
+    <div class="revela"><p class="olho">Perguntas</p><h2>O que todo mundo <em>pergunta antes.</em></h2></div>
+    <div class="lista revela">
+      <details><summary>Eu preciso ficar clicando? Não era automático?</summary><p>No modo Automático, ela faz tudo sozinha no Google Flow: sobe as imagens, tira a legenda velha, gera, baixa e monta. Você escolhe os vídeos, a palavra do CTA e a legenda, e pronto. Existe também o modo Manual, para quem prefere clicar.</p></details>
+      <details><summary>Quantos vídeos por hora ela faz?</summary><p>No Automático, numa conta, medimos cerca de 95 cenas por hora, o que dá uns 23 a 30 vídeos curtos. O ritmo depende do Google: quando ele pede uma pausa, a ferramenta espera e continua sozinha. Por isso a gente não promete número redondo para a sua conta, e sim o que foi medido.</p></details>
+      <details><summary>Quanto custa cada vídeo em créditos?</summary><p>No plano Ultra, cada cena gerada custa 5 créditos no Veo. Um vídeo de 4 cenas sai por cerca de 20 créditos. Tirar a legenda das imagens não custa nada, e no Turbo criar a pessoa nova também não.</p></details>
+      <details><summary>Por que preciso do Claude Code Max 5x?</summary><p>Porque é o Claude Code que lê os seus vídeos, descreve cada cena para o Veo e opera a ferramenta com você, em português simples. É ele que te deixa longe do terminal e da parte técnica.</p></details>
+      <details><summary>Posso usar o computador enquanto ela trabalha?</summary><p>Pode, à vontade. O Piloto não mexe no seu mouse nem no seu teclado. Só deixe a ferramenta aberta.</p></details>
+      <details><summary>Minha conta do Google pode ser bloqueada?</summary><p>Ninguém pode prometer o que o Google decide, e a gente não vai fingir que pode. O que a ferramenta faz: trabalha na sua conta no ritmo que o Flow aceita e, quando o Google pede calma, ela espera e segue devagar.</p></details>
+      <details><summary>Funciona com qualquer vídeo?</summary><p>Com a maioria dos reels falados. Funciona melhor com vídeo vertical, com gente falando e cortes claros entre as cenas. A ferramenta barra o vídeo com problema antes de gastar crédito.</p></details>
+      <details><summary>Ela posta os vídeos por mim?</summary><p>Não. Ela produz e entrega na pasta. Escolher o que vai ao ar e postar continua com você.</p></details>
+      <details><summary>Quanto custa a ferramenta?</summary><p>O valor não fica na página. Ele é passado na conversa, só para quem tem o perfil do grupo. São 10 vagas.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FECHO (Benson: as duas escolhas) ═══ -->
+<section class="fecho pontos" id="decisao">
+  <div class="envolve revela">
+    <p class="olho">A decisão</p>
+    <h2>Amanhã você vai acordar com <em>3 vídeos, ou com a pasta cheia.</em></h2>
+    <div class="escolhas">
+      <div class="escolha"><span class="mono">Opção 1</span><p>Continuar gravando, editando e legendando um vídeo por vez, competindo com quem posta dezenas por dia.</p></div>
+      <div class="escolha boa"><span class="mono">Opção 2</span><p>Deixar uma ferramenta trabalhar a noite inteira por você e acordar com a pasta de entregues cheia, pronta para postar.</p></div>
+    </div>
+    <a class="cta" href="#" data-wa>Quero uma das 10 vagas</a>
+    <p class="cta-nota">Grupo fechado · <b>10 vagas</b> · o valor é passado na conversa</p>
+  </div>
+</section>
+
+<footer>
+  <div class="envolve">
+    <p>Os números desta página foram medidos numa conta no modo automático. O ritmo de cada conta depende do Google, dos créditos disponíveis e dos vídeos escolhidos. A ferramenta produz os vídeos; postar e vender continuam com você. Não há garantia de vendas.</p>
+    <p>Google, Veo, Google Flow, Claude, Claude Code, TikTok, Instagram e Facebook são marcas de seus respectivos donos. Esta ferramenta não é afiliada nem endossada por eles.</p>
+    <p>© 2026</p>
+  </div>
+</footer>
+
+<div class="barra-cta" id="barra"><a class="cta" href="#" data-wa>Quero uma das 10 vagas</a></div>
+
+<script>
+(() => {
+  // WhatsApp com mensagem pronta (o numero do site da AutomaWeb)
+  const msg = "Olá! Assisti ao vídeo da ferramenta e quero uma das 10 vagas do grupo fechado.";
+  const wa = "https://wa.me/5511974181452?text=" + encodeURIComponent(msg);
+  document.querySelectorAll("[data-wa]").forEach((a) => { a.href = wa; a.target = "_blank"; a.rel = "noopener"; });
+
+  // VSL: so' carrega o video quando a pessoa toca (pagina abre leve)
+  const caixa = document.getElementById("vsl");
+  caixa.querySelector(".capa").addEventListener("click", () => {
+    const v = document.createElement("video");
+    v.src = "https://midia.automaweb.pro/landing-ferramenta/vsl-ferramenta.mp4";
+    v.controls = true; v.playsInline = true; v.autoplay = true; v.preload = "auto";
+    v.poster = "https://midia.automaweb.pro/landing-ferramenta/vsl-ferramenta-capa.jpg";
+    caixa.querySelector(".capa").replaceWith(v);
+    caixa.querySelector(".hud")?.remove();
+    v.play().catch(() => {});
+  }, { once: true });
+
+  // bilhetes: 3 seus x uma noite de trabalho
+  const b = document.getElementById("bilhetes");
+  for (let i = 0; i < 100; i++) { const s = document.createElement("span"); s.className = i < 3 ? "vc" : ""; b.appendChild(s); }
+  const acender = () => { [...b.children].forEach((s, i) => { if (i >= 3) setTimeout(() => s.classList.add("on"), 12 * i); }); };
+
+  // prova: os 12 videos do portfolio (bucket R2 publico)
+  const R2 = "https://pub-a64ff07a02a446df8b492d42e886c18b.r2.dev";
+  const VIDEOS = [["l05-aqpwrl-wdbca7xtm8vrc1ik-fiw00e-y2wkzm7fa-3", "Cozinha"], ["final-b", "Consultório"], ["l06-aqnvljwerub5c4eppt7ligq7oqokzg2pndfb19mo-6", "Celeiro"],
+    ["l05-aqner-rdozyeerrear5nroh2mqx7k61dw-cnmng4-5", "Academia"], ["l07-159-848-likes-2-4k-comments-954b4", "Sala"], ["whatsapp-video-2026-09-21-at-07-06-49", "Fazenda"],
+    ["l02-970-likes-1-5k-comments-c818d", "Clínica"], ["final-a", "Consultório"], ["l05-aqmqnihjtihwvubn30c7msdty8g5dbjbsv7hqvjv-8", "Biblioteca"],
+    ["l05-aqpnuylwgusyo6jyjmba21utfeioufknon3zu4m7-e", "Escritório"], ["l06-complexos-fdownloader-net-aqp-b-3umdgy-n-4", "Garagem"], ["whatsapp-video-2026-09-18-at-22-45-25-corte", "Quintal"]];
+  const grade = document.getElementById("videos");
+  let atual = null;
+  VIDEOS.forEach(([n, rot]) => {
+    const btn = document.createElement("button");
+    btn.className = "vid"; btn.type = "button"; btn.setAttribute("aria-label", "Ver o vídeo " + rot + " com som");
+    btn.innerHTML = `<img src="${R2}/p/${n}.jpg" alt="" loading="lazy" decoding="async"><span class="mini-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16"><path d="M1 1v14l12-7z" fill="#F0EDE2"/></svg></span><span class="rot">${rot}</span>`;
+    btn.addEventListener("click", () => {
+      if (atual && atual.btn === btn) { atual.v.paused ? atual.v.play() : atual.v.pause(); return; }
+      if (atual) { atual.v.remove(); atual.btn.classList.remove("tocando"); }
+      const v = document.createElement("video");
+      v.src = `${R2}/v/${n}.mp4`; v.playsInline = true; v.loop = true; v.autoplay = true;
+      btn.appendChild(v); btn.classList.add("tocando"); v.play().catch(() => {});
+      atual = { btn, v };
+    });
+    grade.appendChild(btn);
+  });
+
+  // revelar ao rolar
+  const io = new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("visivel");
+    if (e.target.contains(b)) acender();
+    io.unobserve(e.target);
+  }), { threshold: 0.18 });
+  document.querySelectorAll(".revela").forEach((el) => io.observe(el));
+
+  // barra de CTA no celular: aparece depois do primeiro botao
+  const barra = document.getElementById("barra");
+  const primeiro = document.querySelector(".hero .cta");
+  new IntersectionObserver(([e]) => barra.classList.toggle("ver", !e.isIntersecting && e.boundingClientRect.top < 0)).observe(primeiro);
+})();
+</script>
+</body>
+</html>
