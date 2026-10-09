@@ -436,8 +436,6 @@ footer p { margin: 0 0 10px; max-width: 90ch; }
 .capitulos span { font-size: 14px; line-height: 1.35; }
 .capitulos li.atual button { background: var(--sun-soft); color: var(--text); box-shadow: inset 2px 0 0 var(--sun); }
 .capitulos li.atual time { color: var(--sun); }
-.sala-pe { margin-top: 26px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-.sala-pe .cta-nota { margin: 0; }
 @media (max-width: 1000px) {
   .sala-palco { grid-template-columns: 1fr; }
   .capitulos { height: auto; min-height: 0; max-height: 300px; }
@@ -448,7 +446,6 @@ footer p { margin: 0 0 10px; max-width: 90ch; }
   .sala-play { width: 70px; height: 70px; margin: -35px; }
   .sala-rot { font-size: 11px; bottom: 12px; }
   .selo-sala { font-size: 11px; letter-spacing: .08em; }
-  .sala-pe .cta { width: 100%; }
 }
 /* ═══ FIM TEMPORÁRIO · comunidade ═══ */
 
@@ -528,14 +525,6 @@ footer p { margin: 0 0 10px; max-width: 90ch; }
           </button>
         </div>
         <ol class="capitulos" id="capitulos" aria-label="Capítulos da apresentação"></ol>
-      </div>
-
-      <div class="sala-pe">
-        <a class="cta" href="#" data-wa-comunidade>
-          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1a17 17 0 0 1-1.7-.6c-3-1.3-5-4.3-5.1-4.5-.2-.2-1.2-1.6-1.2-3.1s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.3.5-.5.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 .9c.3.2.5.2.6.4.1.1.1.7-.1 1.4Z"/></svg>
-          Sou dono de comunidade: quero conversar
-        </a>
-        <p class="cta-nota">Conversa direta no WhatsApp · <b>sem compromisso</b></p>
       </div>
     </div>
   </div>
@@ -1012,8 +1001,6 @@ footer p { margin: 0 0 10px; max-width: 90ch; }
       li.querySelector("button").addEventListener("click", () => tocar(t));
       lista.appendChild(li);
     });
-    const msg = "Olá! Sou dono de comunidade, assisti à apresentação da ferramenta e quero conversar.";
-    document.querySelectorAll("[data-wa-comunidade]").forEach((a) => { a.href = "https://wa.me/5511974181452?text=" + encodeURIComponent(msg); a.target = "_blank"; a.rel = "noopener"; });
 
     let video = null, pedido = null;
     const marcar = () => {
